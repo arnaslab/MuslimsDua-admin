@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Button, Typography, Spin } from 'antd';
+import Page from './Page';
+import { useAuth } from "./authUtils";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const { Text } = Typography;
+
+const App = () => {
+  const { isAuthenticated, isSigning, signIn, error, user } = useAuth();
+
+  if (isAuthenticated) { 
+    return <Page user={user} />;
+  } else {
+    return (
+      <div style={{ 
+        width: '100%',
+        height: '100vh',
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
+        {isSigning ? (
+          <Spin />
+        ) : (
+          <>
+            <Button onClick={signIn}>Sign In to continue</Button>
+            {error && <Text type="danger">{error}</Text>}
+          </>
+        )}
+      </div>
+    )
+  }
 }
 
 export default App;
