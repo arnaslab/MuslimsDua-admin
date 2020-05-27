@@ -11,10 +11,11 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
     data={duas}
     getDataById={getDuaById}
     saveData={saveDua}
-    title="title"
+    title={value => value.title.ind}
     viewComponent={({ value }) => (
       <>
-        <Text>{value.title}</Text>
+        <Text>{value.title.ind}</Text>
+        <Text>{value.title.eng}</Text>
         <Text>{value.dua}</Text>
         <div>
           {value.tags.map((tagId, key) => 
@@ -30,7 +31,8 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
     )}
     inputComponent={(({ value, onChange }) => (
       <>
-        <Input placeholder="Title" value={value.title} onChange={(event) => onChange("title", event.target.value)}/>
+        <Input placeholder="Judul" value={value.title.ind} onChange={(event) => onChange("title", { ...value.title, ind: event.target.value })}/>
+        <Input placeholder="Title" value={value.title.eng} onChange={(event) => onChange("title", { ...value.title, eng: event.target.value })}/>
         <Input placeholder="Dua" value={value.dua} onChange={(event) => onChange("dua", event.target.value)}/>
         <Select
           mode="multiple"

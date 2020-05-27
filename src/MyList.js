@@ -103,7 +103,7 @@ const MyList = props => {
                 flexDirection: 'row',
                 justifyContent: 'space-between'
               }}>
-                <Text strong>{item[title]}</Text>
+                <Text strong>{typeof title === 'function' ? title(item) : item[title]}</Text>
                 <ActionButton actions={{
                   ...((open !== item.id) ? {
                     view: handleExpand(item.id, "view"),

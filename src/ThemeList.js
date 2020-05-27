@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Popover, Space, Typography, Input, Button } from 'antd';
 import { ChromePicker } from 'react-color';
 import { PlusOutlined } from '@ant-design/icons';
@@ -8,14 +8,19 @@ const { Text } = Typography;
 
 const getRgb = ({ r, g, b, a }) => `rgb(${r},${g},${b},${a || 1})`;
 
-const ColorItem = ({ color, editable = false, add = false, onChange, onDelete }) => {
+const ColorItem = ({ color: prevColor, editable = false, add = false, onChange, onDelete }) => {
+
+  const [ color, setColor ] = useState(prevColor);
 
   if (add) {
     return (
       <Popover 
         style={{ padding: 0 }}
         content={
-          <ChromePicker color={color} onChange={(color) => onChange(color)} />
+          <>
+            <ChromePicker color={color} onChangeComplete={({ rgb }) => setColor(rgb)} />
+            <Button onClick={() => onChange(color)} style={{ width: '100%' }}>oke</Button>
+          </>
         } 
         trigger="click"
       >
@@ -39,7 +44,7 @@ const ColorItem = ({ color, editable = false, add = false, onChange, onDelete })
     <div style={{
       height: 40,
       width: 40,
-      backgroundColor: color,
+      backgroundColor: prevColor,
       borderRadius: 40,
       cursor: editable ? 'pointer' : 'default'
     }}/>
@@ -52,7 +57,8 @@ const ColorItem = ({ color, editable = false, add = false, onChange, onDelete })
         content={
           <>
             <Button danger onClick={onDelete} style={{ width: '100%' }}>delete</Button>
-            <ChromePicker color={color} onChange={(color) => onChange(color)} />
+            <ChromePicker color={color} onChangeComplete={({ rgb }) => setColor(rgb)} />
+            <Button onClick={() => onChange(color)} style={{ width: '100%' }}>oke</Button>
           </>
         } 
         trigger="click"
@@ -81,20 +87,21 @@ const ThemeList = ({ themes, getThemeById, saveTheme }) => (
             <ColorItem key={key} color={getRgb(color)} />
           )}
         </Space>
+        {value.bgColor && <ColorItem color={getRgb(value.bgColor)} />}
       </>
     )}
     inputComponent={(({ value, onChange }) => (
       <>
         <Input placeholder="Title" value={value.title} onChange={(event) => onChange("title", event.target.value)}/>
         <Space style={{ margin: 5 }}>
-          {value.colors.map((color, key) => 
+          {(value.colors || []).map((color, key) => 
             <ColorItem 
               key={key} 
               color={getRgb(color)} 
               editable
-              onChange={({ rgb }) => onChange('colors', [
+              onChange={newColor => onChange('colors', [
                 ...value.colors.slice(0, key),
-                rgb,
+                newColor,
                 ...value.colors.slice(key + 1, value.colors.length)
               ])} 
               onDelete={() => onChange('colors', [
@@ -103,8 +110,14 @@ const ThemeList = ({ themes, getThemeById, saveTheme }) => (
               ])}
             />
           )}
-          <ColorItem add onChange={({ rgb }) => onChange('colors', [ ...value.colors, rgb ])}/>
+          <ColorItem add onChange={newColor => onChange('colors', [ ...(value.colors || []), newColor ])}/>
         </Space>
+        <ColorItem 
+          add={!value.bgColor} 
+          editable={value.bgColor} 
+          color={value.bgColor}
+          onChange={newColor => onChange('bgColor', newColor)} />
+          onDelete={() => onChange('bgColor', null)} />
       </>
     ))}
   />
