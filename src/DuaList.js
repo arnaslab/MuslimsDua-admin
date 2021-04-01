@@ -27,12 +27,22 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
         <Text>{value.trans}</Text>
         <Text>{value.ind}</Text>
         <Text>{value.eng}</Text>
+        {value.article && 
+          <a href={value.article} target="_blank" rel="noopener noreferrer">
+            {value.article}
+          </a>
+        }
+        {value.youtube && 
+          <a href={`https://www.youtube.com/watch?v=${value.youtube}`} target="_blank" rel="noopener noreferrer">
+            {value.youtube}
+          </a>
+        }
       </>
     )}
     inputComponent={(({ value, onChange }) => (
       <>
-        <Input placeholder="Judul" value={value.title.ind} onChange={(event) => onChange("title", { ...value.title, ind: event.target.value })}/>
-        <Input placeholder="Title" value={value.title.eng} onChange={(event) => onChange("title", { ...value.title, eng: event.target.value })}/>
+        <Input placeholder="Judul" value={value.title && value.title.ind} onChange={(event) => onChange("title", { ...value.title, ind: event.target.value })}/>
+        <Input placeholder="Title" value={value.title && value.title.eng} onChange={(event) => onChange("title", { ...value.title, eng: event.target.value })}/>
         <Input placeholder="Dua" value={value.dua} onChange={(event) => onChange("dua", event.target.value)}/>
         <Select
           mode="multiple"
@@ -48,6 +58,7 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
         <Input placeholder="Translation" value={value.trans} onChange={(event) => onChange("trans", event.target.value)}/>
         <Input placeholder="Terjemah" value={value.ind} onChange={(event) => onChange("ind", event.target.value)}/>
         <Input placeholder="Translate" value={value.eng} onChange={(event) => onChange("eng", event.target.value)}/>
+        <Input placeholder="Youtube Id" value={value.youtube} onChange={(event) => onChange("youtube", event.target.value)}/>
         <Input placeholder="Link article" value={value.article} onChange={(event) => onChange("article", event.target.value)}/>
       </>
     ))}
