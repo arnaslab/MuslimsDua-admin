@@ -14,19 +14,21 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
     title={value => value.title.ind}
     viewComponent={({ value }) => (
       <>
-        <Text>{value.title.ind}</Text>
-        <Text>{value.title.eng}</Text>
+        <Text><b>Judul :</b> {value.title.ind}</Text>
+        <Text><b>Title :</b> {value.title.eng}</Text>
         <Text>{value.dua}</Text>
         <div>
+          <b>Tags : </b>
           {value.tags.map((tagId, key) => 
             <Tag key={key}>
               {tags.find(tag => tag.id === tagId).ind}
             </Tag>
           )}
         </div>
-        <Text>{value.trans}</Text>
-        <Text>{value.ind}</Text>
-        <Text>{value.eng}</Text>
+        <Text><b>Transliterasi :</b> {value.trans}</Text>
+        <Text><b>Terjemahan :</b> {value.ind}</Text>
+        <Text><b>Translation :</b> {value.eng}</Text>
+        <Text><b>Max Counter :</b> {value.maxcnt || 1}</Text>
         {value.article && 
           <a href={value.article} target="_blank" rel="noopener noreferrer">
             {value.article}
@@ -60,6 +62,7 @@ const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
         <Input placeholder="Translate" value={value.eng} onChange={(event) => onChange("eng", event.target.value)}/>
         <Input placeholder="Youtube Id" value={value.youtube} onChange={(event) => onChange("youtube", event.target.value)}/>
         <Input placeholder="Link article" value={value.article} onChange={(event) => onChange("article", event.target.value)}/>
+        <Input placeholder="Max Counter" type="number" value={value.maxcnt} onChange={(event) => onChange("maxcnt", event.target.value)}/>
       </>
     ))}
   />
