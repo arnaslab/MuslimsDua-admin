@@ -3,6 +3,7 @@ import { Popover, Space, Typography, Input, Button } from 'antd';
 import { ChromePicker } from 'react-color';
 import { PlusOutlined } from '@ant-design/icons';
 import MyList from '../components/MyList';
+import { useThemes } from "../utils/dataUtils";
 
 const { Text } = Typography;
 
@@ -72,69 +73,74 @@ const ColorItem = ({ color: prevColor, editable = false, add = false, onChange, 
 
 }
 
-const ThemeList = ({ 
-  isReady,
-  themes, 
-  getThemeById, 
-  save, 
-  sortUp, 
-  sortDown, 
-  cancelSort, 
-  saveAll 
-}) => (
-  <MyList 
-    isReady={isReady}
-    data={themes}
-    getDataById={getThemeById}
-    sortUp={sortUp}
-    sortDown={sortDown}
-    cancelSort={cancelSort}
-    saveData={save}
-    saveAll={saveAll}
-    title="title"
-    viewComponent={({ value }) => (
-      <>
-        <Text>{value.title}</Text>
-        <Space>
-          {value.colors.map((color, key) => 
-            <ColorItem key={key} color={getRgb(color)} />
-          )}
-        </Space>
-        {value.bgColor && <ColorItem color={getRgb(value.bgColor)} />}
-      </>
-    )}
-    inputComponent={(({ value, onChange }) => (
-      <>
-        <Input placeholder="Title" value={value.title} onChange={(event) => onChange("title", event.target.value)}/>
-        <Space style={{ margin: 5 }}>
-          {(value.colors || []).map((color, key) => 
-            <ColorItem 
-              key={key} 
-              color={getRgb(color)} 
-              editable
-              onChange={newColor => onChange('colors', [
-                ...value.colors.slice(0, key),
-                newColor,
-                ...value.colors.slice(key + 1, value.colors.length)
-              ])} 
-              onDelete={() => onChange('colors', [
-                ...value.colors.slice(0, key),
-                ...value.colors.slice(key + 1, value.colors.length)
-              ])}
-            />
-          )}
-          <ColorItem add onChange={newColor => onChange('colors', [ ...(value.colors || []), newColor ])}/>
-        </Space>
-        <ColorItem 
-          add={!value.bgColor} 
-          editable={value.bgColor} 
-          color={value.bgColor}
-          onChange={newColor => onChange('bgColor', newColor)}
-          onDelete={() => onChange('bgColor', null)} 
-        />
-      </>
-    ))}
-  />
-)
+const ThemeList = () => {
+  
+  const { 
+    isReady,
+    themes, 
+    getThemeById, 
+    save, 
+    sortUp, 
+    sortDown, 
+    cancelSort, 
+    saveAll 
+  } = useThemes();  
+
+  return (
+    <MyList 
+      isReady={isReady}
+      data={themes}
+      getDataById={getThemeById}
+      sortUp={sortUp}
+      sortDown={sortDown}
+      cancelSort={cancelSort}
+      saveData={save}
+      saveAll={saveAll}
+      title="title"
+      viewComponent={({ value }) => (
+        <>
+          <Text>{value.title}</Text>
+          <Space>
+            {value.colors.map((color, key) => 
+              <ColorItem key={key} color={getRgb(color)} />
+            )}
+          </Space>
+          {value.bgColor && <ColorItem color={getRgb(value.bgColor)} />}
+        </>
+      )}
+      inputComponent={(({ value, onChange }) => (
+        <>
+          <Input placeholder="Title" value={value.title} onChange={(event) => onChange("title", event.target.value)}/>
+          <Space style={{ margin: 5 }}>
+            {(value.colors || []).map((color, key) => 
+              <ColorItem 
+                key={key} 
+                color={getRgb(color)} 
+                editable
+                onChange={newColor => onChange('colors', [
+                  ...value.colors.slice(0, key),
+                  newColor,
+                  ...value.colors.slice(key + 1, value.colors.length)
+                ])} 
+                onDelete={() => onChange('colors', [
+                  ...value.colors.slice(0, key),
+                  ...value.colors.slice(key + 1, value.colors.length)
+                ])}
+              />
+            )}
+            <ColorItem add onChange={newColor => onChange('colors', [ ...(value.colors || []), newColor ])}/>
+          </Space>
+          <ColorItem 
+            add={!value.bgColor} 
+            editable={value.bgColor} 
+            color={value.bgColor}
+            onChange={newColor => onChange('bgColor', newColor)}
+            onDelete={() => onChange('bgColor', null)} 
+          />
+        </>
+      ))}
+    />
+  )
+}
 
 export default ThemeList;
