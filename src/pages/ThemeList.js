@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Popover, Space, Typography, Input, Button } from 'antd';
 import { ChromePicker } from 'react-color';
 import { PlusOutlined } from '@ant-design/icons';
-import MyList from './MyList';
+import MyList from '../components/MyList';
 
 const { Text } = Typography;
 
@@ -72,12 +72,25 @@ const ColorItem = ({ color: prevColor, editable = false, add = false, onChange, 
 
 }
 
-const ThemeList = ({ themes, getThemeById, saveTheme }) => (
+const ThemeList = ({ 
+  isReady,
+  themes, 
+  getThemeById, 
+  save, 
+  sortUp, 
+  sortDown, 
+  cancelSort, 
+  saveAll 
+}) => (
   <MyList 
-    isReady={themes ? true : false}
+    isReady={isReady}
     data={themes}
     getDataById={getThemeById}
-    saveData={saveTheme}
+    sortUp={sortUp}
+    sortDown={sortDown}
+    cancelSort={cancelSort}
+    saveData={save}
+    saveAll={saveAll}
     title="title"
     viewComponent={({ value }) => (
       <>
@@ -116,8 +129,9 @@ const ThemeList = ({ themes, getThemeById, saveTheme }) => (
           add={!value.bgColor} 
           editable={value.bgColor} 
           color={value.bgColor}
-          onChange={newColor => onChange('bgColor', newColor)} />
-          onDelete={() => onChange('bgColor', null)} />
+          onChange={newColor => onChange('bgColor', newColor)}
+          onDelete={() => onChange('bgColor', null)} 
+        />
       </>
     ))}
   />

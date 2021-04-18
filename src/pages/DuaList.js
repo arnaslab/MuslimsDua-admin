@@ -1,16 +1,30 @@
 import React from 'react';
 import { Typography, Input, Tag, Select } from 'antd';
-import MyList from './MyList';
+import MyList from '../components/MyList';
 
 const { Text } = Typography;
 const { Option } = Select;
 
-const DuaList = ({ tags, duas, getDuaById, saveDua }) => (
+const DuaList = ({ 
+  tags, 
+  isReady,
+  duas, 
+  getDuaById, 
+  save, 
+  sortUp, 
+  sortDown, 
+  cancelSort, 
+  saveAll 
+}) => (
   <MyList 
-    isReady={tags && duas}
+    isReady={tags && isReady}
     data={duas}
     getDataById={getDuaById}
-    saveData={saveDua}
+    sortUp={sortUp}
+    sortDown={sortDown}
+    cancelSort={cancelSort}
+    saveData={save}
+    saveAll={saveAll}
     title={value => value.title.ind}
     viewComponent={({ value }) => (
       <>

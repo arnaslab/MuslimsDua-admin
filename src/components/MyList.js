@@ -10,7 +10,11 @@ const MyList = props => {
     isReady, 
     data, 
     getDataById, 
-    saveData, 
+    saveData,
+    saveAll, 
+    sortUp,
+    sortDown,
+    cancelSort,
     title, 
     inputComponent : Input, 
     viewComponent : View
@@ -42,6 +46,18 @@ const MyList = props => {
       setOpen(id);
       setType("view");
     });
+  }
+
+  const handleSort = () => setType("sort");
+
+  const handleCancelSort = () => {
+    setType("hide");
+    cancelSort();
+  }
+
+  const handleSaveSort = () => {
+    setType("hide");
+    saveAll();
   }
 
   const ActionButton = ({ actions }) => (
@@ -88,7 +104,17 @@ const MyList = props => {
           justifyContent: 'flex-end'
         }}>
           <ActionButton actions={{ 
-            ...(type === "new" ? { save: handleSave, cancel: handleCollapse } : { add: handleNew })
+            ...(type === "new" 
+            ? { 
+              save: handleSave, 
+              cancel: handleCollapse 
+            } : (type === "sort") ? {
+              save: handleSaveSort,
+              cancel: handleCancelSort
+            } : { 
+              sort: handleSort, 
+              add: handleNew
+            })
           }} />
         </div>
         {!open && (type === "new" ? inputComponent : type === "save" && centeredSpin)}
@@ -105,12 +131,18 @@ const MyList = props => {
               }}>
                 <Text strong>{typeof title === 'function' ? title(item) : item[title]}</Text>
                 <ActionButton actions={{
-                  ...((open !== item.id) ? {
-                    view: handleExpand(item.id, "view"),
-                    edit: handleExpand(item.id, "edit")
-                  } : {
+                  ...((open !== item.id) ? (
+                    (type === 'sort') ? {
+                      ...(item.sort !== 1 && { up: () => sortUp(item) }),
+                      ...(item.sort !== data.length && { down: () => sortDown(item) })
+                    } : {
+                      view: handleExpand(item.id, "view"),
+                      edit: handleExpand(item.id, "edit")
+                    } 
+                  ) : {
                     ...(type === 'edit' && { save: handleSave }),
-                    [type === 'edit' ? 'cancel' : 'hide']: handleCollapse
+                    [type === 'edit' ? 'cancel' : 'hide']: handleCollapse,
+                    ...(type === 'view' && { edit: () => setType("edit") }),
                   })
                 }}/>
               </div>
