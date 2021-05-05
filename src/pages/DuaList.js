@@ -37,7 +37,7 @@ const DuaList = ({ tags }) => {
           <Text>{value.dua}</Text>
           <div>
             <b>Tags : </b>
-            {value.tags.map((tagId, key) => 
+            {value.tags?.map((tagId, key) => 
               <Tag key={key}>
                 {tags.find(tag => tag.id === tagId).ind}
               </Tag>
