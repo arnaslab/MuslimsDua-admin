@@ -1,15 +1,28 @@
 import React from 'react';
 import { Typography, Input } from 'antd';
-import MyList from "./MyList";
+import MyList from "../components/MyList";
 
 const { Text } = Typography;
 
-const TagList = ({ tags, getTagById, saveTag }) => (
+const TagList = ({ 
+  isReady, 
+  tags, 
+  getTagById, 
+  save, 
+  sortUp, 
+  sortDown, 
+  cancelSort, 
+  saveAll 
+}) => (
   <MyList
-    isReady={tags ? true : false}
+    isReady={isReady}
     data={tags}
     getDataById={getTagById}
-    saveData={saveTag}
+    sortUp={sortUp}
+    sortDown={sortDown}
+    cancelSort={cancelSort}
+    saveData={save}
+    saveAll={saveAll}
     title="ind"
     viewComponent={({ value }) => (
       <>

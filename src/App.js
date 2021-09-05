@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Typography, Spin } from 'antd';
-import Page from './Page';
-import { useAuth } from "./authUtils";
+import Page from './pages/Page';
+import { useAuth } from "./utils/authUtils";
 
 const { Text } = Typography;
 
