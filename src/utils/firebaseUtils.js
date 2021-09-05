@@ -1,11 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/functions';
+import { apiKey, authDomain, projectId } from './secret'
 
 firebase.initializeApp({
-  apiKey: "AIzaSyDKh0zfGD-sdVC9UaF7qu0V40bFNZ6KPX4",
-  authDomain: "muslimsdua.firebaseapp.com",
-  projectId: "muslimsdua"
+  apiKey,
+  authDomain,
+  projectId
 });
 
 export const signInGoogle = () => firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
